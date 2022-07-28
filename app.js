@@ -14,8 +14,8 @@ const game = {
         ['2', '4', '6']
     ]
 }
-let gameOver = false;
 function getdetails(obj) {
+    let gameEnd = false;
     const cellValue = obj.dataset.value;
     if (!obj.classList.contains('disabled')) {
         obj.classList.add('disabled');
@@ -30,40 +30,36 @@ function getdetails(obj) {
             game.xTurn = true;
         }
     }
-    if (!document.querySelectorAll('.button:not(.disabled)').length) {
-        document.querySelector('.restart-game').classList.add('visible');
-        document.querySelector('.restart-game').textContent = 'Нічія!';
-    }
     game.winningStates.forEach(winningState => {
         const xWins = winningState.every(state => game.xState.includes(state));
         const oWins = winningState.every(state => game.oState.includes(state));
-      
+
         if (xWins || oWins) {
             document.querySelector('.restart-game').classList.add('visible');
-            document.querySelectorAll('.button').forEach(cell => cell.classList.add('disabled'));
             document.querySelector('.restart-game-btn').classList.add('visible');
-        if (xWins) {
+            gameEnd = true;
+            document.querySelectorAll('.button').forEach(cell => cell.classList.add('disabled'));
+            if (xWins) {
                 document.querySelector('.game-over-text').textContent = "X - Переміг"
-            }
-            else {
-                document.querySelector('.game-over-text').textContent ="O - Переміг"
-
+            } else {
+                document.querySelector('.game-over-text').textContent = "O - Переміг"
             }
         }
     })
+    if (!gameEnd) {
+        if (!document.querySelectorAll('.button:not(.disabled)').length) {
+            document.querySelector('.restart-game').classList.add('visible');
+            document.querySelector('.restart-game').textContent = 'Нічія!';
+        }
+    }
 }
-function result(playingField, player) {
-}
-function colorBackground(element1, element2, element3) {
-}
+
 function resetGame() {
     document.querySelector('.restart-game').classList.remove('visible')
     document.querySelectorAll('.button').forEach(cell => {
         cell.classList.remove('disabled', 'x', 'o')
     })
-
     game.xTurn = true
     game.xState = []
     game.oState = []
-
 }
